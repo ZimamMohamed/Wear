@@ -4,7 +4,7 @@
 //  Get these from: Firebase Console → Project Settings → Your Apps → SDK Setup
 // ============================================================
 
-const FIREBASE_CONFIG = {
+const firebaseConfig = {
   apiKey: "AIzaSyBUL1WvXDZ3dRR1VTOWaraeXzhYn6cabMw",
   authDomain: "wear-db49e.firebaseapp.com",
   projectId: "wear-db49e",
