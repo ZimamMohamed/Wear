@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WOMEN'S FASHION MART</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="header">
+    <div class="header-inner">
+      <div class="logo">
+        
+        <span class="logo-en">WOMEN'S FASHION MART</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#categories">Categories</a>
+        <a href="#products">Shop</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-actions">
+        <button class="icon-btn" id="searchBtn" title="Search">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <button class="icon-btn cart-btn" id="cartBtn" title="Cart">
+          <svg viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          <span class="cart-count" id="cartCount">0</span>
+        </button>
+        <button class="hamburger" id="hamburger">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile Nav -->
+    <div class="mobile-nav" id="mobileNav">
+      <a href="#home">Home</a>
+      <a href="#categories">Categories</a>
+      <a href="#products">Shop</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </header>
+
+  <!-- SEARCH BAR -->
+  <div class="search-overlay" id="searchOverlay">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search products..." />
+      <button id="closeSearch">✕</button>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-sub">Elegant · Modest · Timeless</p>
+      <h1 class="hero-title">Dress the Whole<br/><em>Family in Beauty</em></h1>
+      <p class="hero-desc">Curated Dubai Abayas, Kids Wear's, Wedding and Traditional Salwars — rooted in tradition, styled for today.</p>
+      <div class="hero-btns">
+        <a href="#categories" class="btn btn-primary">Shop Now</a>
+        <a href="#about" class="btn btn-outline">Our Story</a>
+      </div>
+    </div>
+    <div class="hero-decor">
+      <div class="decor-circle c1"></div>
+      <div class="decor-circle c2"></div>
+      <div class="decor-line l1"></div>
+      <div class="decor-line l2"></div>
+    </div>
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE STRIP -->
+  <div class="marquee-strip">
+    <div class="marquee-track">
+      <span>Free Shipping on Orders Over $75</span>
+      <span>✦</span>
+      <span>New Abaya Collection — Spring 2026</span>
+      <span>✦</span>
+      <span>Kids Sale — Up to 30% Off</span>
+      <span>✦</span>
+      <span>Baby Essentials — Soft & Safe</span>
+      <span>✦</span>
+      <span>Free Shipping on Orders Over $75</span>
+      <span>✦</span>
+      <span>New Abaya Collection — Spring 2026</span>
+      <span>✦</span>
+      <span>Kids Sale — Up to 30% Off</span>
+      <span>✦</span>
+      <span>Baby Essentials — Soft & Safe</span>
+      <span>✦</span>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <section class="categories" id="categories">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Browse by</p>
+        <h2 class="section-title">Categories</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="category-grid">
+        <div class="category-card active" data-category="all">
+          <div class="cat-icon">✦</div>
+          <h3>All Products</h3>
+          <p>Shop everything</p>
+        </div>
+        <div class="category-card" data-category="abaya">
+          <div class="cat-image cat-abaya" id="catImg-abaya">
+            <div class="cat-overlay"></div>
+          </div>
+          <!-- Upload Button -->
+          <button class="cat-upload-btn" onclick="event.stopPropagation(); triggerUpload('abaya')" title="Upload category image">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Photo
+          </button>
+          <input type="file" accept="image/*" id="upload-abaya" class="cat-file-input"
+                 onchange="setCategoryImage('abaya', this)" />
+          <div class="cat-upload-success" id="catUploadSuccess-abaya">✅ Image saved!</div>
+          <div class="cat-info">
+            <div class="cat-icon">🕌</div>
+            <h3>Dubai Abaya's</h3>
+            <p>Modest elegance redefined</p>
+            <span class="cat-count" id="abayaCount">0 items</span>
+          </div>
+        </div>
+        <div class="category-card" data-category="children">
+          <div class="cat-image cat-children" id="catImg-children">
+            <div class="cat-overlay"></div>
+          </div>
+          <!-- Upload Button -->
+          <button class="cat-upload-btn" onclick="event.stopPropagation(); triggerUpload('children')" title="Upload category image">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Photo
+          </button>
+          <input type="file" accept="image/*" id="upload-children" class="cat-file-input"
+                 onchange="setCategoryImage('children', this)" />
+          <div class="cat-upload-success" id="catUploadSuccess-children">✅ Image saved!</div>
+          <div class="cat-info">
+            <div class="cat-icon">🌟</div>
+            <h3>Kids wear's</h3>
+            <p>Playful & stylish designs</p>
+            <span class="cat-count" id="childrenCount">0 items</span>
+          </div>
+        </div>
+        <div class="category-card" data-category="baby">
+          <div class="cat-image cat-baby" id="catImg-baby">
+            <div class="cat-overlay"></div>
+          </div>
+          <!-- Upload Button -->
+          <button class="cat-upload-btn" onclick="event.stopPropagation(); triggerUpload('baby')" title="Upload category image">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Photo
+          </button>
+          <input type="file" accept="image/*" id="upload-baby" class="cat-file-input"
+                 onchange="setCategoryImage('baby', this)" />
+          <div class="cat-upload-success" id="catUploadSuccess-baby">✅ Image saved!</div>
+          <div class="cat-info">
+            <div class="cat-icon">🍼</div>
+            <h3>Wedding and Traditional Salwars</h3>
+            <p>Soft, safe & adorable</p>
+            <span class="cat-count" id="babyCount">0 items</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products-section" id="products">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Handpicked for you</p>
+        <h2 class="section-title">Our Collection</h2>
+        <div class="section-divider"></div>
+      </div>
+
+      <!-- Filter & Sort Bar -->
+      <div class="filter-bar">
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="abaya">Dubai Abaya's</button>
+          <button class="filter-tab" data-filter="children">Kids wear's</button>
+          <button class="filter-tab" data-filter="baby">Wedding and Traditional Salwars</button>
+        </div>
+        <div class="sort-wrapper">
+          <label>Sort:</label>
+          <select id="sortSelect">
+            <option value="default">Featured</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="name">Name A–Z</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid" id="productsGrid"></div>
+
+      <!-- No Results -->
+      <div class="no-results" id="noResults" style="display:none;">
+        <p>No products found. Try a different search or filter.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES STRIP -->
+  <section class="features-strip">
+    <div class="container">
+      <div class="features-grid">
+        <div class="feature">
+          <div class="feature-icon">🚚</div>
+          <h4>Free Shipping</h4>
+          <p>On all orders</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">↩️</div>
+          <h4>Easy Returns</h4>
+          <p>30-day hassle-free returns</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🔒</div>
+          <h4>Secure Payment</h4>
+          <p>100% secure transactions</p>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">💬</div>
+          <h4>24/7 Support</h4>
+          <p>We're always here for you</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="container about-inner">
+      <div class="about-visual">
+        <div class="about-img-frame">
+          
+          <img src="image/wear.jpeg" alt="">
+          <div class="about-badge">Est. 2021</div>
+        </div>
+      </div>
+      <div class="about-text">
+        <p class="section-eyebrow">Our Story</p>
+        <h2>Rooted in Tradition,<br/><em>Styled for Today</em></h2>
+        <p>WOMEN'S FASHION MART was born from a passion for modest, beautiful fashion. We believe every woman and child deserves clothing that reflects their dignity, identity, and personality.</p>
+        <p>From handcrafted abayas to playful children's wear and Wedding and Traditional Salwars — every piece is carefully selected for quality, comfort, and style.</p>
+        <a href="#products" class="btn btn-primary">Explore Collection</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-eyebrow">Get in Touch</p>
+        <h2 class="section-title">Contact Us</h2>
+        <div class="section-divider"></div>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-item">
+            <span class="ci-icon">📍</span>
+            <div><h4>Address</h4><p>Colombo, Srilanka</p></div>
+          </div>
+          <div class="contact-item">
+            <span class="ci-icon">📞</span>
+            <div><h4>Phone</h4><p>+94 755646479</p></div>
+          </div>
+          <div class="contact-item">
+            <span class="ci-icon">✉️</span>
+            <div><h4>Email</h4><p>flowerhut2020@gmail.com</p></div>
+          </div>
+          <div class="contact-item">
+            <span class="ci-icon">🕐</span>
+            <div><h4>Hours</h4><p>Sat–Thu: 9am – 10pm</p></div>
+          </div>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-row">
+            <input type="text" placeholder="Your Name" required />
+            <input type="email" placeholder="Email Address" required />
+          </div>
+          <input type="text" placeholder="Subject" />
+          <textarea rows="5" placeholder="Your Message..." required></textarea>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+          <p class="form-success" id="formSuccess">✅ Message sent! We'll reply shortly.</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <div class="logo">
+          
+          <span class="logo-en">WOMEN'S FASHION MART</span>
+        </div>
+        <p>Elegant modest fashion for the whole family.</p>
+        <div class="social-links">
+          <a href="#" class="social-link">Instagram</a>
+          <a href="#" class="social-link">Facebook</a>
+          <a href="#" class="social-link">TikTok</a>
+        </div>
+      </div>
+      <div class="footer-links">
+        <h4>Shop</h4>
+        <a href="#" onclick="filterByCategory('abaya')">Abaya</a>
+        <a href="#" onclick="filterByCategory('children')">Children</a>
+        <a href="#" onclick="filterByCategory('baby')">Baby</a>
+        <a href="#products">All Products</a>
+      </div>
+      <div class="footer-links">
+        <h4>Help</h4>
+        <a href="#">FAQ</a>
+        <a href="#">Shipping Policy</a>
+        <a href="#">Returns</a>
+        <a href="#contact">Contact Us</a>
+      </div>
+      <div class="footer-links">
+        <h4>Company</h4>
+        <a href="#about">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Careers</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Noor Boutique. All Rights Reserved. Made with ♥</p>
+    </div>
+  </footer>
+
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button id="closeCart">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty" id="cartEmpty">
+        <p>🛒 Your cart is empty</p>
+        <a href="#products" class="btn btn-primary" id="shopNowBtn">Start Shopping</a>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-total">
+        <span>Total:</span>
+        <span id="cartTotal">$0.00</span>
+      </div>
+      <button class="btn btn-primary" id="checkoutBtn">Checkout</button>
+    </div>
+  </aside>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Admin panel removed: add images directly via script.js product data -->
+
+  <!-- PRODUCT MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="product-modal" id="productModal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-inner" id="modalInner"></div>
+    </div>
+  </div>
+
+  <script src="firebase-config.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Noor Boutique — Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Tajawal:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root{--gold:#b8975a;--gold-light:#d4b07a;--gold-dark:#8a6d3c;--cream:#faf7f2;--cream-dark:#f0ebe0;--ink:#1a1410;--ink-light:#4a3f32;--ink-muted:#7a6a58;--white:#fff;--green:#25d366;--green-dark:#128c5e;--red:#e05252;--font-d:'Playfair Display',serif;--font-b:'Tajawal',sans-serif;--shadow:0 4px 24px rgba(26,20,16,.10);--shadow-lg:0 12px 48px rgba(26,20,16,.18);--r:12px;--r-lg:20px;--t:0.3s cubic-bezier(.4,0,.2,1);}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:var(--font-b);background:var(--cream);color:var(--ink);min-height:100vh;}
+    a{text-decoration:none;color:inherit;}button{cursor:pointer;border:none;font-family:inherit;}input,textarea,select{font-family:inherit;}
+
+    /* LOGIN */
+    #loginScreen{position:fixed;inset:0;background:linear-gradient(135deg,#1a1410,#2d2218,#3d2e1e);display:flex;align-items:center;justify-content:center;z-index:9999;}
+    .login-box{background:var(--white);border-radius:var(--r-lg);padding:56px 48px;width:420px;max-width:90vw;box-shadow:var(--shadow-lg);text-align:center;}
+    .login-logo-ar{font-family:var(--font-d);font-size:3rem;color:var(--gold);}
+    .login-logo-en{font-size:0.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--ink-muted);}
+    .login-box h2{font-family:var(--font-d);font-size:1.4rem;margin:24px 0 8px;}
+    .login-box p{font-size:.9rem;color:var(--ink-muted);margin-bottom:32px;}
+    .login-field input{width:100%;padding:14px 18px;border:1.5px solid var(--cream-dark);border-radius:var(--r);font-size:.95rem;outline:none;transition:var(--t);margin-bottom:16px;}
+    .login-field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,151,90,.1);}
+    .login-btn{width:100%;padding:15px;background:var(--gold);color:var(--white);border-radius:50px;font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-top:8px;transition:var(--t);box-shadow:0 4px 20px rgba(184,151,90,.3);}
+    .login-btn:hover{background:var(--gold-dark);transform:translateY(-2px);}
+    .login-error{color:var(--red);font-size:.85rem;margin-top:12px;display:none;}
+    .login-error.show{display:block;}
+
+    /* APP */
+    #adminApp{display:none;}
+    .admin-topbar{background:linear-gradient(135deg,#1a1410,#2d2218);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:100;box-shadow:0 2px 16px rgba(0,0,0,.3);}
+    .admin-brand{display:flex;align-items:center;gap:12px;}
+    .admin-brand-ar{font-family:var(--font-d);font-size:1.4rem;color:var(--gold);}
+    .admin-brand-en{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+    .admin-badge{background:rgba(184,151,90,.2);border:1px solid rgba(184,151,90,.4);color:var(--gold-light);padding:4px 14px;border-radius:20px;font-size:.75rem;letter-spacing:.08em;}
+    .topbar-right{display:flex;align-items:center;gap:16px;}
+    .view-site-btn{color:rgba(255,255,255,.7);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;padding:8px 16px;border:1px solid rgba(255,255,255,.15);border-radius:20px;transition:var(--t);}
+    .view-site-btn:hover{color:var(--white);border-color:rgba(255,255,255,.4);}
+    .logout-btn{color:rgba(255,255,255,.5);font-size:.8rem;transition:var(--t);}
+    .logout-btn:hover{color:var(--red);}
+
+    .admin-main{max-width:1200px;margin:0 auto;padding:40px 24px;}
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:40px;}
+    .stat-card{background:var(--white);border-radius:var(--r-lg);padding:28px 24px;box-shadow:var(--shadow);border-left:4px solid var(--gold);}
+    .stat-num{font-family:var(--font-d);font-size:2rem;color:var(--gold-dark);}
+    .stat-label{font-size:.8rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.1em;margin-top:4px;}
+    .section-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+    .section-title-row h2{font-family:var(--font-d);font-size:1.5rem;}
+    .cat-tabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+    .cat-tab{padding:10px 22px;border-radius:50px;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500;color:var(--ink-muted);background:var(--cream-dark);transition:var(--t);border:2px solid transparent;}
+    .cat-tab:hover{color:var(--gold);border-color:var(--gold-light);}
+    .cat-tab.active{background:var(--gold);color:var(--white);box-shadow:0 4px 16px rgba(184,151,90,.3);}
+    .admin-products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;}
+    .admin-card{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow);border:1.5px solid transparent;transition:var(--t);}
+    .admin-card:hover{box-shadow:var(--shadow-lg);border-color:rgba(184,151,90,.2);}
+    .admin-card-img{height:200px;position:relative;overflow:hidden;background:var(--cream-dark);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+    .admin-card-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
+    .emoji-ph{font-size:5rem;z-index:1;}
+    .img-overlay{position:absolute;inset:0;background:rgba(26,20,16,.6);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;opacity:0;transition:var(--t);color:var(--white);font-size:.85rem;z-index:2;}
+    .img-overlay svg{width:28px;height:28px;stroke:var(--white);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+    .admin-card-img:hover .img-overlay{opacity:1;}
+    .admin-card-body{padding:20px;}
+    .admin-card-cat{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:12px;}
+    .admin-field{margin-bottom:12px;}
+    .admin-field label{font-size:.72rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;display:block;}
+    .admin-input{width:100%;padding:10px 14px;border:1.5px solid var(--cream-dark);border-radius:var(--r);font-size:.9rem;color:var(--ink);background:var(--cream);outline:none;transition:var(--t);}
+    .admin-input:focus{border-color:var(--gold);background:var(--white);box-shadow:0 0 0 3px rgba(184,151,90,.1);}
+    textarea.admin-input{resize:vertical;min-height:75px;}
+    .price-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    .badge-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+    .badge-opt{padding:6px 12px;border-radius:20px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;border:1.5px solid var(--cream-dark);color:var(--ink-muted);background:transparent;transition:var(--t);}
+    .badge-opt:hover{border-color:var(--gold);}
+    .badge-opt.sel-new{background:#b8975a;color:#fff;border-color:#b8975a;}
+    .badge-opt.sel-sale{background:#c17b6a;color:#fff;border-color:#c17b6a;}
+    .badge-opt.sel-trending{background:#7a9b7a;color:#fff;border-color:#7a9b7a;}
+    .badge-opt.sel-none{background:var(--cream-dark);color:var(--ink);}
+    .admin-card-actions{display:flex;align-items:center;gap:10px;margin-top:16px;}
+    .save-btn{flex:1;padding:12px;background:var(--gold);color:var(--white);border-radius:50px;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;transition:var(--t);}
+    .save-btn:hover{background:var(--gold-dark);}
+    .save-btn:disabled{opacity:.5;cursor:not-allowed;}
+    .saved-ok{font-size:.75rem;color:var(--green-dark);display:none;}
+    .saved-ok.show{display:block;}
+    .hidden-file{display:none;}
+    .toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--white);padding:14px 28px;border-radius:50px;font-size:.9rem;z-index:9998;opacity:0;transition:all .4s cubic-bezier(.4,0,.2,1);white-space:nowrap;box-shadow:var(--shadow-lg);}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+    .setup-guide{background:linear-gradient(135deg,#1a1410,#2d2218);border-radius:var(--r-lg);padding:36px 40px;margin-bottom:40px;color:var(--white);position:relative;}
+    .setup-guide h3{font-family:var(--font-d);font-size:1.3rem;margin-bottom:8px;color:var(--gold-light);}
+    .setup-guide p{font-size:.9rem;opacity:.7;margin-bottom:20px;}
+    .steps{display:flex;flex-direction:column;gap:12px;}
+    .step{display:flex;align-items:flex-start;gap:14px;}
+    .step-num{width:28px;height:28px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;flex-shrink:0;margin-top:2px;}
+    .step-text{font-size:.85rem;opacity:.8;line-height:1.6;}
+    .step-text strong{color:var(--gold-light);}
+    .step-text code{background:rgba(255,255,255,.1);padding:2px 8px;border-radius:4px;font-family:monospace;font-size:.8rem;}
+    .guide-dismiss{position:absolute;top:16px;right:16px;background:transparent;color:rgba(255,255,255,.4);font-size:1rem;}
+    .guide-dismiss:hover{color:#fff;}
+    .fb-status{display:flex;align-items:center;gap:10px;padding:12px 20px;border-radius:var(--r);margin-bottom:32px;font-size:.85rem;}
+    .fb-status.connected{background:#e8f5e9;color:#2e7d32;border:1px solid #a5d6a7;}
+    .fb-status.not-connected{background:#fff8e1;color:#f57f17;border:1px solid #ffe082;}
+    .fb-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+    .fb-status.connected .fb-dot{background:#43a047;}
+    .fb-status.not-connected .fb-dot{background:#fb8c00;animation:pulse 1.5s ease infinite;}
+    @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+    @media(max-width:768px){.stats-row{grid-template-columns:1fr 1fr;}.admin-products-grid{grid-template-columns:1fr;}.admin-topbar{padding:0 16px;}.admin-main{padding:24px 16px;}.setup-guide{padding:24px 20px;}}
+  </style>
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-box">
+    
+    <div class="login-logo-en">WOMEN'S FASHION MART</div>
+    <h2>Admin Panel</h2>
+    <p>Enter your admin password to manage the store</p>
+    <div class="login-field">
+      <input type="password" id="passwordInput" placeholder="Enter admin password" />
+    </div>
+    <button class="login-btn" id="loginBtn">Login to Admin</button>
+    <p class="login-error" id="loginError">Incorrect password. Please try again.</p>
+  </div>
+</div>
+
+<div id="adminApp">
+  <div class="admin-topbar">
+    <div class="admin-brand">
+      <div>
+        <div class="admin-brand-ar">نور</div>
+        <div class="admin-brand-en">NOOR BOUTIQUE</div>
+      </div>
+      <span class="admin-badge">Admin Panel</span>
+    </div>
+    <div class="topbar-right">
+      <a href="index.html" target="_blank" class="view-site-btn">View Live Site</a>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <div class="admin-main">
+    <div class="fb-status not-connected" id="fbStatus">
+      <div class="fb-dot"></div>
+      <span id="fbStatusText">Checking Firebase connection...</span>
+    </div>
+
+    <div class="setup-guide" id="setupGuide">
+      <button class="guide-dismiss" id="dismissGuide">X</button>
+      <h3>One-Time Firebase Setup (5 minutes, free)</h3>
+      <p>Do this once and all your product edits will go live instantly for every visitor worldwide.</p>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div class="step-text">Go to <strong>console.firebase.google.com</strong> and create a free project</div></div>
+        <div class="step"><div class="step-num">2</div><div class="step-text">In the project: <strong>Build &rarr; Firestore Database</strong> &rarr; Create &rarr; Start in test mode</div></div>
+        <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Build &rarr; Storage</strong> &rarr; Get started &rarr; Start in test mode</div></div>
+        <div class="step"><div class="step-num">4</div><div class="step-text"><strong>Project Settings &rarr; Your apps &rarr; Web app</strong> &rarr; Copy the config</div></div>
+        <div class="step"><div class="step-num">5</div><div class="step-text">Open <code>firebase-config.js</code> and paste your values. Also set your <code>ADMIN_PASSWORD</code> and <code>WHATSAPP_NUMBER</code></div></div>
+        <div class="step"><div class="step-num">6</div><div class="step-text">Deploy to Vercel. Come back here, log in, and start uploading images and editing products!</div></div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num" id="statTotal">18</div><div class="stat-label">Total Products</div></div>
+      <div class="stat-card" style="border-color:#b8975a"><div class="stat-num" id="statAbaya">6</div><div class="stat-label">Abaya Items</div></div>
+      <div class="stat-card" style="border-color:#7a9b7a"><div class="stat-num" id="statChildren">6</div><div class="stat-label">Children Items</div></div>
+      <div class="stat-card" style="border-color:#6a8fa0"><div class="stat-num" id="statBaby">6</div><div class="stat-label">Baby Items</div></div>
+    </div>
+
+    <div class="section-title-row">
+      <h2>Manage Products</h2>
+      <span style="font-size:.85rem;color:var(--ink-muted)">Click any product image to upload your photo</span>
+    </div>
+
+    <div class="cat-tabs" id="catTabs">
+      <button class="cat-tab active" data-cat="all">All Products</button>
+      <button class="cat-tab" data-cat="abaya">Abaya</button>
+      <button class="cat-tab" data-cat="children">Children</button>
+      <button class="cat-tab" data-cat="baby">Baby</button>
+    </div>
+
+    <div class="admin-products-grid" id="adminGrid"></div>
+  </div>
+</div>
+
+<div class="toast" id="adminToast"></div>
+
+<script src="firebase-config.js"></script>
+<script type="module">
+const DEFAULTS = [
+  {id:"abaya1", name:"Classic Black Abaya",      category:"abaya",    price:89.99,  originalPrice:null,   emoji:"🖤",badge:"new",      rating:4.8,reviews:124,description:"A timeless black abaya crafted from premium crepe fabric. Features elegant flared sleeves and a subtle golden trim.",sizes:["XS","S","M","L","XL","XXL"]},
+  {id:"abaya2", name:"Embroidered Linen Abaya",  category:"abaya",    price:129.99, originalPrice:159.99, emoji:"🌸",badge:"sale",     rating:4.9,reviews:87, description:"Breathable linen abaya with intricate hand embroidery along the cuffs and hem.",sizes:["S","M","L","XL"]},
+  {id:"abaya3", name:"Velvet Evening Abaya",      category:"abaya",    price:179.99, originalPrice:null,   emoji:"💜",badge:"trending", rating:4.7,reviews:56, description:"Luxurious velvet abaya in deep plum with crystal button detailing.",sizes:["XS","S","M","L","XL"]},
+  {id:"abaya4", name:"Floral Chiffon Abaya",      category:"abaya",    price:99.99,  originalPrice:119.99, emoji:"🌺",badge:"sale",     rating:4.6,reviews:93, description:"Light and flowing chiffon abaya with a delicate floral pattern.",sizes:["S","M","L","XL","XXL"]},
+  {id:"abaya5", name:"Open Kimono Abaya",         category:"abaya",    price:109.99, originalPrice:null,   emoji:"✨",badge:"new",      rating:4.5,reviews:44, description:"Modern kimono-style open abaya with contrast trim.",sizes:["One Size","S/M","L/XL"]},
+  {id:"abaya6", name:"Pearl Button Abaya",        category:"abaya",    price:145.00, originalPrice:null,   emoji:"🤍",badge:null,       rating:4.8,reviews:71, description:"Elegant ivory abaya with mother-of-pearl button detailing.",sizes:["XS","S","M","L"]},
+  {id:"child1", name:"Mini Abaya Set - Girls",   category:"children", price:45.99,  originalPrice:59.99,  emoji:"👧",badge:"sale",     rating:4.9,reviews:108,description:"A beautifully designed abaya set for girls aged 4-12.",sizes:["4Y","6Y","8Y","10Y","12Y"]},
+  {id:"child2", name:"Boys Thobe - White",       category:"children", price:39.99,  originalPrice:null,   emoji:"👦",badge:"new",      rating:4.7,reviews:65, description:"Crisp white thobe for boys, perfect for Eid.",sizes:["4Y","6Y","8Y","10Y","12Y","14Y"]},
+  {id:"child3", name:"Kids Floral Dress Set",    category:"children", price:34.99,  originalPrice:44.99,  emoji:"🌷",badge:"sale",     rating:4.8,reviews:142,description:"Charming 2-piece floral dress with matching headband.",sizes:["2Y","4Y","6Y","8Y","10Y"]},
+  {id:"child4", name:"Boys Casual Denim Set",    category:"children", price:49.99,  originalPrice:null,   emoji:"🧒",badge:null,       rating:4.6,reviews:38, description:"Comfortable denim shirt and jogger pants set for boys.",sizes:["4Y","6Y","8Y","10Y","12Y"]},
+  {id:"child5", name:"Girls Eid Gown",           category:"children", price:64.99,  originalPrice:79.99,  emoji:"🌟",badge:"trending", rating:4.9,reviews:97, description:"A stunning Eid party gown in rose gold satin with tulle layers.",sizes:["3Y","5Y","7Y","9Y","11Y"]},
+  {id:"child6", name:"Kids Pyjama Set",          category:"children", price:24.99,  originalPrice:null,   emoji:"😴",badge:"new",      rating:4.7,reviews:55, description:"Super soft cotton pyjama set with moon and star prints.",sizes:["2Y","4Y","6Y","8Y","10Y"]},
+  {id:"baby1",  name:"Newborn Gift Set",         category:"baby",     price:54.99,  originalPrice:69.99,  emoji:"🍼",badge:"sale",     rating:4.9,reviews:176,description:"A complete 7-piece newborn gift set. 100% organic cotton.",sizes:["0-3M","3-6M"]},
+  {id:"baby2",  name:"Baby Blanket - Muslin",    category:"baby",     price:22.99,  originalPrice:null,   emoji:"🌙",badge:"new",      rating:4.8,reviews:83, description:"Ultra-soft 4-layer muslin swaddle blanket.",sizes:["One Size"]},
+  {id:"baby3",  name:"Baby Romper - 3 Pack",     category:"baby",     price:34.99,  originalPrice:44.99,  emoji:"🐣",badge:"sale",     rating:4.7,reviews:121,description:"Set of 3 adorable snap-button rompers in neutral colours.",sizes:["0-3M","3-6M","6-9M","9-12M"]},
+  {id:"baby4",  name:"Baby Sleep Bag",           category:"baby",     price:44.99,  originalPrice:null,   emoji:"😇",badge:null,       rating:4.9,reviews:59, description:"Safe, cosy sleeping bag for babies.",sizes:["0-6M","6-18M","18-36M"]},
+  {id:"baby5",  name:"Embroidered Baby Cap Set", category:"baby",     price:16.99,  originalPrice:null,   emoji:"🧢",badge:"new",      rating:4.6,reviews:34, description:"Set of 3 cotton baby caps with delicate embroidery.",sizes:["0-3M","3-6M","6-12M"]},
+  {id:"baby6",  name:"Baby Footwear Set",        category:"baby",     price:19.99,  originalPrice:24.99,  emoji:"👶",badge:"trending", rating:4.8,reviews:47, description:"Pack of 3 pairs of soft-sole baby shoes/booties.",sizes:["0-3M","3-6M","6-12M"]},
+];
+
+let liveProducts = DEFAULTS.map(p=>({...p,imageUrl:null}));
+let currentCat="all", db, storage, fbReady=false;
+let _setDoc,_doc,_stRef,_upload,_getURL,_col,_getDocs;
+
+// LOGIN
+const loginScreen=document.getElementById("loginScreen");
+const adminApp=document.getElementById("adminApp");
+const pwInput=document.getElementById("passwordInput");
+const loginError=document.getElementById("loginError");
+
+function doLogin(){
+  const pw=pwInput.value.trim();
+  const correct=window.ADMIN_PASSWORD||"noor2026admin";
+  if(pw===correct){loginScreen.style.display="none";adminApp.style.display="block";sessionStorage.setItem("noorAdmin","1");boot();}
+  else{loginError.classList.add("show");pwInput.value="";setTimeout(()=>loginError.classList.remove("show"),3000);}
+}
+document.getElementById("loginBtn").addEventListener("click",doLogin);
+pwInput.addEventListener("keydown",e=>{if(e.key==="Enter")doLogin();});
+document.getElementById("logoutBtn").addEventListener("click",()=>{sessionStorage.removeItem("noorAdmin");location.reload();});
+if(sessionStorage.getItem("noorAdmin")==="1"){loginScreen.style.display="none";adminApp.style.display="block";boot();}
+
+async function boot(){
+  setupGuide();catTabs();
+  await connectFirebase();
+  renderGrid();
+}
+
+function setupGuide(){
+  if(localStorage.getItem("guideDone"))document.getElementById("setupGuide").style.display="none";
+  document.getElementById("dismissGuide").addEventListener("click",()=>{document.getElementById("setupGuide").style.display="none";localStorage.setItem("guideDone","1");});
+}
+
+function catTabs(){
+  document.getElementById("catTabs").addEventListener("click",e=>{
+    const tab=e.target.closest(".cat-tab");if(!tab)return;
+    document.querySelectorAll(".cat-tab").forEach(t=>t.classList.remove("active"));tab.classList.add("active");
+    currentCat=tab.dataset.cat;renderGrid();
+  });
+}
+
+async function connectFirebase(){
+  const st=document.getElementById("fbStatus"),stxt=document.getElementById("fbStatusText");
+  try{
+    const cfg=window.FIREBASE_CONFIG;
+    if(!cfg||cfg.apiKey.includes("PASTE")){stxt.textContent="Firebase not configured yet. Follow the setup guide above.";return;}
+    const {initializeApp}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
+    const {getFirestore,collection,getDocs,doc,setDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const {getStorage,ref,uploadBytes,getDownloadURL}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js");
+    const app=initializeApp(cfg);
+    db=getFirestore(app);storage=getStorage(app);
+    _setDoc=setDoc;_doc=doc;_stRef=ref;_upload=uploadBytes;_getURL=getDownloadURL;_col=collection;_getDocs=getDocs;
+    const snap=await getDocs(collection(db,"products"));
+    snap.forEach(d=>{const i=liveProducts.findIndex(p=>p.id===d.id);if(i!==-1)liveProducts[i]={...liveProducts[i],...d.data()};});
+    fbReady=true;st.className="fb-status connected";stxt.textContent="Firebase connected! All changes go live for every visitor instantly.";
+  }catch(e){st.className="fb-status not-connected";stxt.textContent="Firebase error: "+e.message;}
+}
+
+function renderGrid(){
+  const grid=document.getElementById("adminGrid");grid.innerHTML="";
+  const list=currentCat==="all"?liveProducts:liveProducts.filter(p=>p.category===currentCat);
+  list.forEach(p=>grid.appendChild(makeCard(p)));updateStats();
+}
+
+const GRADS={abaya:"linear-gradient(135deg,#2d1f14,#3d2518)",children:"linear-gradient(135deg,#2a3a2a,#354535)",baby:"linear-gradient(135deg,#2a2535,#352545)"};
+
+function makeCard(product){
+  const card=document.createElement("div");card.className="admin-card";card.id="card-"+product.id;
+  const imgBg=product.imageUrl?"":("background:"+GRADS[product.category]+";");
+  const imgPart=product.imageUrl?`<img src="${product.imageUrl}" alt="${product.name}">`:`<div class="emoji-ph">${product.emoji}</div>`;
+  const badgeOpts=["new","sale","trending","none"].map(b=>{
+    const sel=(b==="none"&&!product.badge)||product.badge===b;
+    return `<button class="badge-opt ${sel?"sel-"+b:""}" data-badge="${b}">${b==="none"?"None":b[0].toUpperCase()+b.slice(1)}</button>`;
+  }).join("");
+  card.innerHTML=`
+    <div class="admin-card-img" id="wrap-${product.id}" style="${imgBg}">
+      ${imgPart}
+      <div class="img-overlay">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>${product.imageUrl?"Change Photo":"Upload Photo"}</span>
+      </div>
+      <input type="file" accept="image/*" class="hidden-file" id="file-${product.id}">
+    </div>
+    <div class="admin-card-body">
+      <div class="admin-card-cat">${product.category.toUpperCase()}</div>
+      <div class="admin-field"><label>Product Name</label><input class="admin-input" id="n-${product.id}" value="${product.name}"></div>
+      <div class="price-row">
+        <div class="admin-field"><label>Price ($)</label><input class="admin-input" type="number" id="p-${product.id}" value="${product.price}" step="0.01" min="0"></div>
+        <div class="admin-field"><label>Original Price (sale)</label><input class="admin-input" type="number" id="o-${product.id}" value="${product.originalPrice||""}" step="0.01" min="0" placeholder="Leave empty if none"></div>
+      </div>
+      <div class="admin-field"><label>Description</label><textarea class="admin-input" id="d-${product.id}" rows="3">${product.description}</textarea></div>
+      <div class="admin-field"><label>Badge</label><div class="badge-row" id="br-${product.id}">${badgeOpts}</div></div>
+      <div class="admin-card-actions">
+        <button class="save-btn" id="sb-${product.id}">Save Changes</button>
+        <span class="saved-ok" id="ok-${product.id}">✅ Saved!</span>
+      </div>
+    </div>`;
+  // img click
+  card.querySelector("#wrap-"+product.id).addEventListener("click",()=>card.querySelector("#file-"+product.id).click());
+  card.querySelector("#file-"+product.id).addEventListener("change",e=>uploadImg(e,product));
+  // badge
+  card.querySelector("#br-"+product.id).addEventListener("click",e=>{
+    const b=e.target.closest(".badge-opt");if(!b)return;
+    card.querySelectorAll(".badge-opt").forEach(x=>x.className="badge-opt");
+    b.classList.add("sel-"+b.dataset.badge);
+    const i=liveProducts.findIndex(x=>x.id===product.id);
+    if(i!==-1)liveProducts[i].badge=b.dataset.badge==="none"?null:b.dataset.badge;
+  });
+  // save
+  card.querySelector("#sb-"+product.id).addEventListener("click",()=>saveProduct(product.id));
+  return card;
+}
+
+async function uploadImg(e,product){
+  const file=e.target.files[0];if(!file)return;
+  if(!file.type.startsWith("image/")){showToast("Please select a valid image.");return;}
+  if(file.size>8*1024*1024){showToast("Image too large. Max 8MB.");return;}
+  const sb=document.getElementById("sb-"+product.id);
+  sb.disabled=true;sb.textContent="Uploading...";
+  if(fbReady){
+    try{
+      const r=_stRef(storage,"products/"+product.id+"_"+Date.now());
+      await _upload(r,file);const url=await _getURL(r);
+      const i=liveProducts.findIndex(x=>x.id===product.id);if(i!==-1)liveProducts[i].imageUrl=url;
+      const wrap=document.getElementById("wrap-"+product.id);
+      const old=wrap.querySelector("img,.emoji-ph");if(old)old.remove();
+      const img=document.createElement("img");img.src=url;img.alt=product.name;
+      wrap.insertBefore(img,wrap.firstChild);wrap.style.background="";
+      wrap.querySelector(".img-overlay span").textContent="Change Photo";
+      sb.disabled=false;sb.textContent="Save Changes";
+      showToast("Image uploaded! Click Save Changes.");
+    }catch(err){sb.disabled=false;sb.textContent="Save Changes";showToast("Upload failed: "+err.message);}
+  }else{
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      const wrap=document.getElementById("wrap-"+product.id);
+      const old=wrap.querySelector("img,.emoji-ph");if(old)old.remove();
+      const img=document.createElement("img");img.src=ev.target.result;img.alt=product.name;
+      wrap.insertBefore(img,wrap.firstChild);wrap.style.background="";
+      const i=liveProducts.findIndex(x=>x.id===product.id);if(i!==-1)liveProducts[i].imageUrl=ev.target.result;
+    };reader.readAsDataURL(file);
+    sb.disabled=false;sb.textContent="Save Changes";
+    showToast("Preview only — connect Firebase to save for all visitors.");
+  }
+  e.target.value="";
+}
+
+async function saveProduct(id){
+  const sb=document.getElementById("sb-"+id);const ok=document.getElementById("ok-"+id);
+  const i=liveProducts.findIndex(x=>x.id===id);if(i===-1)return;
+  liveProducts[i].name=document.getElementById("n-"+id).value.trim();
+  liveProducts[i].price=parseFloat(document.getElementById("p-"+id).value)||liveProducts[i].price;
+  const ov=document.getElementById("o-"+id).value.trim();liveProducts[i].originalPrice=ov?parseFloat(ov):null;
+  liveProducts[i].description=document.getElementById("d-"+id).value.trim();
+  if(!fbReady){showToast("Firebase not connected. Cannot save to live site yet.");return;}
+  sb.disabled=true;sb.textContent="Saving...";
+  try{
+    await _setDoc(_doc(db,"products",id),{name:liveProducts[i].name,price:liveProducts[i].price,originalPrice:liveProducts[i].originalPrice,description:liveProducts[i].description,badge:liveProducts[i].badge||null,imageUrl:liveProducts[i].imageUrl||null,category:liveProducts[i].category,emoji:liveProducts[i].emoji,rating:liveProducts[i].rating,reviews:liveProducts[i].reviews,sizes:liveProducts[i].sizes});
+    sb.disabled=false;sb.textContent="Save Changes";ok.classList.add("show");setTimeout(()=>ok.classList.remove("show"),2500);
+    showToast('"'+liveProducts[i].name+'" saved! Live site updated for all visitors.');updateStats();
+  }catch(e){sb.disabled=false;sb.textContent="Save Changes";showToast("Save error: "+e.message);}
+}
+
+function updateStats(){
+  document.getElementById("statTotal").textContent=liveProducts.length;
+  document.getElementById("statAbaya").textContent=liveProducts.filter(p=>p.category==="abaya").length;
+  document.getElementById("statChildren").textContent=liveProducts.filter(p=>p.category==="children").length;
+  document.getElementById("statBaby").textContent=liveProducts.filter(p=>p.category==="baby").length;
+}
+
+let tt;function showToast(msg){const t=document.getElementById("adminToast");t.textContent=msg;t.classList.add("show");clearTimeout(tt);tt=setTimeout(()=>t.classList.remove("show"),3500);}
+</script>
+</body>
+</html>
